@@ -1,0 +1,11 @@
+node {
+    stage('first job') {
+        sh 'echo "Welcome, My Jenkins frameworks."'
+    }
+    stage('second job') {
+        sh 'sleep 10'
+    }
+    stage('third job') {
+        sh 'echo "Thanks for visit, Bye'
+    }
+}
