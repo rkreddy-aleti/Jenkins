@@ -9,7 +9,7 @@ pipeline {
         }
         stage('second job') {
             steps {
-                sh 'echo "Sleeping for 10 seconds.'
+                sh 'echo "Sleeping for 10 seconds."'
                 sh 'sleep 10'
             }
         }
