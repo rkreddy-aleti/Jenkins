@@ -1,0 +1,22 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('first job') {
+            steps {
+                sh 'echo "Welcome, My Jenkins framework through declarative pipeline"'
+            }
+        }
+        stage('second job') {
+            steps {
+                sh 'echo "Sleeping for 10 seconds.'
+                sh 'sleep 10'
+            }
+        }
+        stage('third job') {
+            steps {
+                sh 'echo "Thanks for visit, Bye"'
+            }
+        }
+    }
+}
