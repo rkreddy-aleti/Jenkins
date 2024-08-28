@@ -6,6 +6,6 @@ node {
         sh 'sleep 10'
     }
     stage('third job') {
-        sh 'echo "Thanks for visit, Bye'
+        sh 'echo "Thanks for visit, Bye"'
     }
 }
