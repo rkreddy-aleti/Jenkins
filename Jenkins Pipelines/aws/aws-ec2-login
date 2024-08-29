@@ -2,16 +2,16 @@ pipeline {
     agent any
 
     environment {
-        //Define the AWS environment here
+        // Define the AWS environment here
         EC2_INSTANCE_IP = '54.152.102.140'
         SSH_CREDENTIALS_ID = 'jenkins-aws'
     }
 
     stages {
-        stage('Run a command on EC2') {
+        stage('Run commands on EC2') {
             steps {
                 script {
-                    //SSH into a EC2 EC2_INSTANCE
+                    // SSH into the EC2 instance and run multiple commands
                     sshagent([SSH_CREDENTIALS_ID]) {
                         sh '''
                             #!/bin/bash
@@ -19,9 +19,9 @@ pipeline {
                             echo "EC2 IP: ${EC2_INSTANCE_IP}"
 
                             ssh -o StrictHostKeyChecking=no ubuntu@${EC2_INSTANCE_IP} <<EOF
-                                echo "Hey I am \$(whoami) is successfully login to \$(hostname)"
+                                echo "Hey I am \$(whoami) successfully logged in to \$(hostname)"
                                 
-                                echo "The memory space of this instance"
+                                echo "The memory space of this instance:"
                                 free -m
                                 
                                 echo "The disk space is:"
@@ -36,4 +36,3 @@ pipeline {
         }
     }
 }
-
