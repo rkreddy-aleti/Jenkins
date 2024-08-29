@@ -13,7 +13,7 @@ pipeline {
                 //SSH into a EC2 EC2_INSTANCE
                 sshagent([rkreddy-aws-cred]) {
                     sh '''
-                        ssh -o StrictHostKeyChecking=no ubuntu@${54.152.102.140} 'whoami'
+                        ssh -o StrictHostKeyChecking=no ubuntu@${env.EC2_INSTANCE_IP} 'echo Hello from EC2'
                     '''
                 }
             }
