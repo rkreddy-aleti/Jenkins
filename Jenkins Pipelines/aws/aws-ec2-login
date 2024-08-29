@@ -2,21 +2,34 @@ pipeline {
     agent any
 
     environment {
-        //Define the AWS environment here
-        EC2_INSTANCE_IP = '54.152.102.140'
-        SSH_CREDENTIALS_ID = 'rkreddy-aws-cred'
+        EC2_INSTANCE_IP = 'your-ec2-instance-public-ip'
+        SSH_CREDENTIALS_ID = 'your-ssh-credentials-id'
     }
 
     stages {
-        stage('Run a command on EC2') {
+        stage('Checkout SCM') {
             steps {
-                //SSH into a EC2 EC2_INSTANCE
-                sshagent([rkreddy-aws-cred]) {
-                    sh '''
-                        ssh -o StrictHostKeyChecking=no ubuntu@${54.152.102.140} 'whoami'
-                    '''
+                // Checkout from SCM
+                checkout scm
+            }
+        }
+
+        stage('Run Command on EC2') {
+            steps {
+                script {
+                    sshagent([env.SSH_CREDENTIALS_ID]) {
+                        sh """
+                            ssh -o StrictHostKeyChecking=no ec2-user@${env.EC2_INSTANCE_IP} 'whoami'
+                        """
+                    }
                 }
             }
+        }
+    }
+
+    post {
+        always {
+            // Any cleanup or notification steps
         }
     }
 }
