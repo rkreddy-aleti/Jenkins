@@ -1,0 +1,23 @@
+pipeline {
+    agent any
+
+    environment {
+        //Define the AWS environment here
+        EC2_INSTANCE_IP = '54.152.102.140'
+        SSH_CREDENTIALS_ID = 'rkreddy-aws-cred'
+    }
+
+    stages {
+        stage('Run a command on EC2) {
+            steps {
+                //SSH into a EC2 EC2_INSTANCE
+                sshagent([rkreddy-aws-cred]) {
+                    ssh '''
+                        ssh -i StrictHostKeyChecking=no /home/terrform_test.pem ubuntu@54.152.102.140
+                        whoami
+
+                }
+            }
+        }
+    }
+}
