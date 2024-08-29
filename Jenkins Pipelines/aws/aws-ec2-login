@@ -8,7 +8,7 @@ pipeline {
     }
 
     stages {
-        stage('Run a command on EC2) {
+        stage('Run a command on EC2') {
             steps {
                 //SSH into a EC2 EC2_INSTANCE
                 sshagent([rkreddy-aws-cred]) {
