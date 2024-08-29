@@ -15,7 +15,7 @@ pipeline {
                     ssh '''
                         ssh -i StrictHostKeyChecking=no /home/terrform_test.pem ubuntu@54.152.102.140
                         whoami
-
+                    '''
                 }
             }
         }
