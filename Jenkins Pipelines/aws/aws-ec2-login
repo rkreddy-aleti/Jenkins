@@ -27,6 +27,9 @@ pipeline {
                                 echo "The disk space is:"
                                 df -h
                                 
+                                echo "Installing Java"
+                                sudo apt install default-jdk 
+
                                 echo "All commands executed successfully, thanks"
                             
                         '''
