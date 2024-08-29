@@ -18,8 +18,8 @@ pipeline {
                             echo "Starting SSH connection..."
                             echo "EC2 IP: ${EC2_INSTANCE_IP}"
 
-                            ssh -o StrictHostKeyChecking=no ubuntu@${EC2_INSTANCE_IP} <<'EOF'
-                                echo "Hey I am $(whoami) is successfully login to $(hostname)"
+                            ssh -o StrictHostKeyChecking=no ubuntu@${EC2_INSTANCE_IP} <<EOF
+                                echo "Hey I am \$(whoami) is successfully login to \$(hostname)"
                                 
                                 echo "The memory space of this instance"
                                 free -m
