@@ -11,7 +11,7 @@ pipeline {
         stage('Run a command on EC2') {
             steps {
                 //SSH into a EC2 EC2_INSTANCE
-                sshagent([rkreddy-aws-cred]) {
+                sshagent([env.rkreddy-aws-cred]) {
                     sh '''
                         ssh -o StrictHostKeyChecking=no ubuntu@${env.EC2_INSTANCE_IP} 'echo Hello from EC2'
                     '''
