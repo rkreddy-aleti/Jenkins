@@ -12,12 +12,12 @@ pipeline {
             steps {
                 script {
                     //SSH into a EC2 EC2_INSTANCE
-                    sshagent([env.SSH_CREDENTIALS_ID]) {
+                    sshagent([SSH_CREDENTIALS_ID]) {
                         sh '''
                             #!/bin/bash
                             echo "Starting SSH connection..."
                             echo "EC2 IP: ${EC2_INSTANCE_IP}"
-                            ssh -o StrictHostKeyChecking=no ubuntu@${env.EC2_INSTANCE_IP} 'echo Hello from EC2'
+                            ssh -o StrictHostKeyChecking=no ubuntu@${EC2_INSTANCE_IP} 'echo Hello from EC2'
                         '''
                     }
                 }
