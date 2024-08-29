@@ -4,7 +4,7 @@ pipeline {
     environment {
         //Define the AWS environment here
         EC2_INSTANCE_IP = '54.152.102.140'
-        SSH_CREDENTIALS_ID = 'rkreddy-aws-cred'
+        SSH_CREDENTIALS_ID = 'jenkins-aws'
     }
 
     stages {
