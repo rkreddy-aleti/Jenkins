@@ -16,15 +16,15 @@ pipeline {
                         sh '''
                             #!/bin/bash
                             echo "Starting SSH connection..."
-                            ssh -o StrictHostKeyChecking=no ubuntu@${EC2_INSTANCE_IP} << EOF
-                                echo "Hey I am $(whoami) is successfully login to $(Hostname)"
+                            ssh -o StrictHostKeyChecking=no ubuntu@${EC2_INSTANCE_IP} << 'EOF'
+                                echo "Hey I am $(whoami) is successfully login to $(hostname)"
                                 pwd
                                 echo "The memory space of this instance"
                                 free -m
                                 echo "The disk space is:"
                                 df -h
                                 echo "All commands executed successfully, thanks"
-                            EOF
+                            'EOF'
                         '''
                     }
                 }
