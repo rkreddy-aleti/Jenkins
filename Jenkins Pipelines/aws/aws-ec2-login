@@ -24,7 +24,7 @@ pipeline {
                                 echo "The disk space is:"
                                 df -h
                                 echo "All commands executed successfully, thanks"
-                            EOF
+                            // EOF
                         '''
                     }
                 }
