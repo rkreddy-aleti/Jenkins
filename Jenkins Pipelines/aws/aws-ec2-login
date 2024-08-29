@@ -16,10 +16,7 @@ pipeline {
                         sh '''
                             #!/bin/bash
                             echo "Starting SSH connection..."
-                            echo "EC2 IP: ${EC2_INSTANCE_IP}"
-                            set -x  # Print each command before executing
-                            ssh -o StrictHostKeyChecking=no ubuntu@${EC2_INSTANCE_IP} 'echo Hello from EC2'
-                            set +x  # Stop printing commands
+                            ssh -o StrictHostKeyChecking=no ubuntu@${EC2_INSTANCE_IP} 'whoami'
                         '''
                     }
                 }
