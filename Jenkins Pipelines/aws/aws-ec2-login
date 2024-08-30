@@ -1,9 +1,9 @@
 pipeline {
-    agent {node { label 'Agent - 54.87.134.2'}}
+    agent {node { label 'Agent - 98.82.1.209'}}
 
     environment {
         // Define the AWS environment here
-        EC2_INSTANCE_IP = '54.87.134.2'
+        EC2_INSTANCE_IP = '98.82.1.209'
         SSH_CREDENTIALS_ID = 'jenkins-aws'
     }
 
