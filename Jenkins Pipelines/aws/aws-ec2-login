@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Define the AWS environment here
-        EC2_INSTANCE_IP = '54.152.102.140'
+        EC2_INSTANCE_IP = '54.87.134.2'
         SSH_CREDENTIALS_ID = 'jenkins-aws'
     }
 
