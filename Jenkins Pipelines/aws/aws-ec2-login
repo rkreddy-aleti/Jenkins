@@ -49,7 +49,7 @@ pipeline {
 
     post {
         success {
-            emailext attachmentPattern: '**/build-report.txt',
+            emailext attachmentsPattern: '**/build-report.txt',
             body: '''The Build body was successful.
 
             please find the attached build report.''',
@@ -57,7 +57,7 @@ pipeline {
             to: 'rkreddy.aleti@gmail.com'
         }
         failure {
-            emailext attachmentPattern: '**/build-report.txt',
+            emailext attachmentsPattern: '**/build-report.txt',
             body: '''The Build body was failed.
 
             please find the attached build report.''',
