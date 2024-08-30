@@ -9,7 +9,7 @@ pipeline {
     }
 
     stages {
-        stage('run commands on AWS EC2') {
+        stage('run commands on AWS first EC2') {
             steps {
                 script {
                     // SSH into the EC2 instance and run multiple commands
@@ -20,7 +20,7 @@ pipeline {
                             echo "EC2 IP: ${EC2_INSTANCE_IP1}"
 
                             ssh -o StrictHostKeyChecking=no ubuntu@${EC2_INSTANCE_IP1} <<`EOF`
-                                echo "Hey I am $(whoami) successfully logged in to $(hostname)"
+                                echo "Hey I am $(whoami) successfully logged in to $(hostname)."
                                 
                                 echo "The memory space of this instance:"
                                 free -m
@@ -31,28 +31,14 @@ pipeline {
                                 echo "Installing Java"
                                 sudo apt install default-jdk 
 
-                                echo "All commands executed successfully, on server1"
-
-                                ssh -o StrictHostKeyChecking=no ubuntu@${EC2_INSTANCE_IP2} <<`EOF`
-                                echo "Hey I am $(whoami) successfully logged in to $(hostname)"
-                                
-                                echo "The memory space of this instance:"
-                                free -m
-                                
-                                echo "The disk space is:"
-                                df -h
-                                
-                                echo "Installing Java"
-                                sudo apt install default-jdk 
-
-                                echo "All commands executed successfully, on server2"
-                            
+                                echo "All commands executed successfully, on first server."
                         '''
                     }
                 }
             }
         }
-        stage('generate report') {
+
+        stage('generate report on first server') {
             steps {
                 script {
                     //Generate the report here
@@ -60,7 +46,45 @@ pipeline {
                 }
             }
         }
-    }
 
-    
+        //Second server execution.
+        stage('run commands on AWS second EC2') {
+            steps {
+                script {
+                    // SSH into the EC2 instance and run multiple commands
+                    sshagent([SSH_CREDENTIALS_ID]) {
+                        sh '''
+                            #!/bin/bash
+                            echo "Starting SSH connection..."
+                            echo "EC2 IP: ${EC2_INSTANCE_IP2}"
+
+                            ssh -o StrictHostKeyChecking=no ubuntu@${EC2_INSTANCE_IP2} <<`EOF`
+                                echo "Hey I am $(whoami) successfully logged in to $(hostname)."
+                                
+                                echo "The memory space of this instance:"
+                                free -m
+                                
+                                echo "The disk space is:"
+                                df -h
+                                
+                                echo "Installing Java"
+                                sudo apt install default-jdk 
+
+                                echo "All commands executed successfully, on second server."
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('generate report on second server') {
+            steps {
+                script {
+                    //Generate the report here
+                    sh 'echo "Build report content" > build-report.txt'
+                }
+            }
+        }
+
+    }
 }
