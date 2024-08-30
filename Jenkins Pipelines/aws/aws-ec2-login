@@ -1,5 +1,5 @@
 pipeline {
-    agent 'Agent - 54.87.134.2'
+    agent {Agent - 54.87.134.2}
 
     environment {
         // Define the AWS environment here
