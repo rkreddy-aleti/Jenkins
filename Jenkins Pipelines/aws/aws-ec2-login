@@ -37,5 +37,10 @@ pipeline {
                 }
             }
         }
+        stage('send mail') {
+            steps {
+                mail bcc: '', body: '$DEFAULT_CONTENT', cc: '', from: '', replyTo: '', subject: '$DEFAULT_SUBJECT', to: 'rkreddy.aleti@gmail.com'
+            }
+        }
     }
 }
