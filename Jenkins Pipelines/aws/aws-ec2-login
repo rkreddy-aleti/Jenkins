@@ -8,7 +8,7 @@ pipeline {
     }
 
     stages {
-        stage('Run commands on EC2') {
+        stage('run commands on AWS EC2') {
             steps {
                 script {
                     // SSH into the EC2 instance and run multiple commands
@@ -37,10 +37,33 @@ pipeline {
                 }
             }
         }
-        stage('send mail') {
+        stage('generate report') {
             steps {
-                mail bcc: '', body: '$DEFAULT_CONTENT', cc: '', from: '', replyTo: '', subject: '$DEFAULT_SUBJECT', to: 'rkreddy.aleti@gmail.com'
+                script {
+                    //Generate the report here
+                    sh 'echo "Build report content" > build-report.txt'
+                }
             }
         }
+    }
+
+    post {
+        success {
+            emailext attachmentPattern: '**/build-report.txt',
+            body: '''The Build body was successful.
+
+            please find the attached build report.''',
+            subject: 'Build Success - ${JENKINS_JOB_NAME} #$    {BUILD_NUMBER}',
+            to: 'rkreddy.aleti@gmail.com'
+        }
+        failure {
+            emailext attachmentPattern: '**/build-report.txt',
+            body: '''The Build body was failed.
+
+            please find the attached build report.''',
+            subject: 'Build Failed - ${JENKINS_JOB_NAME} #$    {BUILD_NUMBER}',
+            to: 'rkreddy.aleti@gmail.com'
+        }
+        
     }
 }
