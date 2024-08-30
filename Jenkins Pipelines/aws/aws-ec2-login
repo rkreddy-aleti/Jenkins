@@ -3,7 +3,8 @@ pipeline {
 
     environment {
         // Define the AWS environment here
-        EC2_INSTANCE_IP = '98.82.1.209'
+        EC2_INSTANCE_IP1 = '54.87.134.2'
+        EC2_INSTANCE_IP2 = '98.82.1.209'
         SSH_CREDENTIALS_ID = 'jenkins-aws'
     }
 
@@ -16,9 +17,9 @@ pipeline {
                         sh '''
                             #!/bin/bash
                             echo "Starting SSH connection..."
-                            echo "EC2 IP: ${EC2_INSTANCE_IP}"
+                            echo "EC2 IP: ${EC2_INSTANCE_IP1}"
 
-                            ssh -o StrictHostKeyChecking=no ubuntu@${EC2_INSTANCE_IP} <<`EOF`
+                            ssh -o StrictHostKeyChecking=no ubuntu@${EC2_INSTANCE_IP1} <<`EOF`
                                 echo "Hey I am $(whoami) successfully logged in to $(hostname)"
                                 
                                 echo "The memory space of this instance:"
@@ -30,7 +31,21 @@ pipeline {
                                 echo "Installing Java"
                                 sudo apt install default-jdk 
 
-                                echo "All commands executed successfully, thanks"
+                                echo "All commands executed successfully, on server1"
+
+                                ssh -o StrictHostKeyChecking=no ubuntu@${EC2_INSTANCE_IP2} <<`EOF`
+                                echo "Hey I am $(whoami) successfully logged in to $(hostname)"
+                                
+                                echo "The memory space of this instance:"
+                                free -m
+                                
+                                echo "The disk space is:"
+                                df -h
+                                
+                                echo "Installing Java"
+                                sudo apt install default-jdk 
+
+                                echo "All commands executed successfully, on server2"
                             
                         '''
                     }
