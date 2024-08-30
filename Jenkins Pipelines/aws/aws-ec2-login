@@ -48,8 +48,18 @@ pipeline {
     }
 
     post {
+        always {
+            script {
+                // Save the console output to a file
+                def consoleOutputFile = "console-output.txt"
+                writeFile file: consoleOutputFile, text: currentBuild.rawBuild.getLog().join('\n')
+                
+                // Archive the console output file
+                archiveArtifacts artifacts: consoleOutputFile, allowEmptyArchive: true
+            }
+        }
         success {
-            emailext attachmentsPattern: '**/build-report.txt',
+            emailext attachmentsPattern: '**/console-output.txt, **/build-report.txt',
             body: '''The Build body was successful.
 
             please find the attached build report.''',
@@ -57,7 +67,7 @@ pipeline {
             to: 'rkreddy.aleti@gmail.com'
         }
         failure {
-            emailext attachmentsPattern: '**/build-report.txt',
+            emailext attachmentsPattern: '**/console-output.txt, **/build-report.txt',
             body: '''The Build body was failed.
 
             please find the attached build report.''',
