@@ -1,5 +1,6 @@
 pipeline {
-    agent {node { label 'Agent - 98.82.1.209'}}
+    agent any
+    # agent {node { label 'Agent - 98.82.1.209'}}
 
     environment {
         // Define the AWS environment here
