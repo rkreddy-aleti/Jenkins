@@ -47,35 +47,5 @@ pipeline {
         }
     }
 
-    post {
-        always {
-            script {
-                // Save the console output to a file
-                def consoleOutputFile = "console-output.txt"
-                
-                // Using shell command to capture the log
-                sh "echo '${currentBuild.rawBuild.getLog().join('\n')}' > ${consoleOutputFile}"
-                
-                // Archive the console output file
-                archiveArtifacts artifacts: consoleOutputFile, allowEmptyArchive: true
-            }
-        }
-        success {
-            emailext attachmentsPattern: '**/console-output.txt, **/build-report.html',
-                      body: '''The build was successful.
-
-                      Please find the attached build report and console output.''',
-                      subject: 'Build Success - ${JENKINS_JOB_NAME} #${BUILD_NUMBER}',
-                      to: 'rkreddy.aleti@gmail.com'
-        }
-        failure {
-            emailext attachmentsPattern: '**/console-output.txt, **/build-report.html',
-                      body: '''The build failed.
-
-                      Please find the attached build report and console output.''',
-                      subject: 'Build Failure - ${JENKINS_JOB_NAME} #${BUILD_NUMBER}',
-                      to: 'rkreddy.aleti@gmail.com'
-        }
-        
-    }
+    
 }
