@@ -8,10 +8,6 @@ pipeline {
         SSH_CREDENTIALS_ID = 'jenkins-aws'
     }
 
-    triggers {
-        cron('*/2 * * * *')
-    }
-
     stages {
         stage('run commands on AWS first EC2') {
             steps {
