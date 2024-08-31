@@ -11,6 +11,7 @@ pipeline {
             steps {
                 // withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'AWS-Cred', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                     sh '''
+                    echo "Hellow..."
                     echo "AWS version:" | aws --version
                     aws ec2 describe-instances
                     '''
