@@ -36,6 +36,7 @@ pipeline {
                                 sudo apt install default-jdk 
 
                                 echo "All commands executed successfully, on first server."
+                                echo "Thanks, logging off from first server."
                         '''
                     }
                 }
@@ -75,6 +76,8 @@ pipeline {
                                 sudo apt install default-jdk 
 
                                 echo "All commands executed successfully, on second server."
+                                echo "Thanks, logging off from second server."
+
                         '''
                     }
                 }
