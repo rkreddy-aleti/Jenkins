@@ -100,7 +100,7 @@ pipeline {
                 def consoleOutputFile = "console-output.txt"
                 
                 // Using shell command to capture the log
-                sh "echo '${currentBuild.rawBuild.getLog().join('\n')}' > ${consoleOutputFile}"
+                writeFile file: consoleOutputFile, text: currentBuild.rawBuild.getLog().join('\n')
                 
                 // Archive the console output file
                 archiveArtifacts artifacts: consoleOutputFile, allowEmptyArchive: true
