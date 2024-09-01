@@ -32,7 +32,7 @@ pipeline {
                                 sudo apt install default-jdk 
 
                                 echo "All commands executed successfully, on first server."
-                                echo "Thanks, logging off from  the first-server."
+                                echo "Thanks, logging off from the first-server."
                         '''
                     }
                 }
