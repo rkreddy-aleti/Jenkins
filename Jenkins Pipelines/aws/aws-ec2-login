@@ -21,7 +21,7 @@ pipeline {
                         sh '''
                             #!/bin/bash
                             echo "Starting SSH connection..."
-                            echo "EC2 IP: ${EC2_INSTANCE_IP1}"
+                            echo "EC2 Server IP: ${EC2_INSTANCE_IP1}"
 
                             ssh -o StrictHostKeyChecking=no ubuntu@${EC2_INSTANCE_IP1} <<`EOF`
                                 echo "Hey I am $(whoami) successfully logged in to $(hostname)."
@@ -61,7 +61,7 @@ pipeline {
                         sh '''
                             #!/bin/bash
                             echo "Starting SSH connection..."
-                            echo "EC2 IP: ${EC2_INSTANCE_IP2}"
+                            echo "EC2 Server IP: ${EC2_INSTANCE_IP2}"
 
                             ssh -o StrictHostKeyChecking=no ubuntu@${EC2_INSTANCE_IP2} <<`EOF`
                                 echo "Hey I am $(whoami) successfully logged in to $(hostname)."
