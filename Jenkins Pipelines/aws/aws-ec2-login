@@ -96,11 +96,12 @@ pipeline {
     post {
         always {
             script {
+                sh 'echo "" > console-output.txt'
                 // Write the console output to a file
                 def logLines = currentBuild.rawBuild.getLog()
                 def consoleOutput = logLines.join('\n')
                 
-                writeFile file: env.CONSOLE_OUTPUT_FILE, text: consoleOutput
+                writeFile file: env.CONSOLE_OUTPUT_FILE, text: consoleOutput.txt
 
                 // Archive the artifacts
                 archiveArtifacts artifacts: "${env.CONSOLE_OUTPUT_FILE}, ${env.BUILD_REPORT_FILE}", allowEmptyArchive: true
