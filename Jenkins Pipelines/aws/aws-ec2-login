@@ -101,7 +101,7 @@ pipeline {
                 def logLines = currentBuild.rawBuild.getLog()
                 def consoleOutput = logLines.join('\n')
                 
-                writeFile file: env.CONSOLE_OUTPUT_FILE, text: consoleOutput.txt
+                writeFile file: env.CONSOLE_OUTPUT_FILE, text: consoleOutput
 
                 // Archive the artifacts
                 archiveArtifacts artifacts: "${env.CONSOLE_OUTPUT_FILE}, ${env.BUILD_REPORT_FILE}", allowEmptyArchive: true
