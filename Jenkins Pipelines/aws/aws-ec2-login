@@ -6,6 +6,9 @@ pipeline {
         EC2_INSTANCE_IP1 = '54.87.134.2'
         EC2_INSTANCE_IP2 = '98.82.1.209'
         SSH_CREDENTIALS_ID = 'jenkins-aws'
+
+        CONSOLE_OUTPUT_FILE = 'console-output.txt'
+        BUILD_REPORT_FILE = 'build-report.txt'
     }
 
     stages {
@@ -90,38 +93,34 @@ pipeline {
         }
     }
     post {
-    always {
-        script {
-            // Define file names
-            def consoleOutputFile = "console-output.txt"
-            def buildReportFile = "build-report.html"
+        always {
+            script {
+                // Capture the console output
+                writeFile file: env.CONSOLE_OUTPUT_FILE, text: currentBuild.rawBuild.getLog().join('\n')
 
-            // Capture console output and write to file
-            writeFile file: consoleOutputFile, text: currentBuild.rawBuild.getLog().join('\n')
-            
-            // Archive the files
-            archiveArtifacts artifacts: "${consoleOutputFile}, ${buildReportFile}", allowEmptyArchive: true
+                // Archive the artifacts
+                archiveArtifacts artifacts: "${env.CONSOLE_OUTPUT_FILE}, ${env.BUILD_REPORT_FILE}", allowEmptyArchive: true
+            }
+        }
+        success {
+            emailext(
+                attachmentsPattern: "${env.CONSOLE_OUTPUT_FILE}, ${env.BUILD_REPORT_FILE}",
+                body: '''The build was successful.
+
+                Please find the attached build report and console output.''',
+                subject: 'Build Success - ${JENKINS_JOB_NAME} #${BUILD_NUMBER}',
+                to: 'rkreddy.aleti@gmail.com'
+            )
+        }
+        failure {
+            emailext(
+                attachmentsPattern: "${env.CONSOLE_OUTPUT_FILE}, ${env.BUILD_REPORT_FILE}",
+                body: '''The build failed.
+
+                Please find the attached build report and console output.''',
+                subject: 'Build Failure - ${JENKINS_JOB_NAME} #${BUILD_NUMBER}',
+                to: 'rkreddy.aleti@gmail.com'
+            )
         }
     }
-    success {
-        emailext(
-            attachmentsPattern: "${consoleOutputFile}, ${buildReportFile}",
-            body: '''The build was successful.
-
-            Please find the attached build report and console output.''',
-            subject: 'Build Success - ${JENKINS_JOB_NAME} #${BUILD_NUMBER}',
-            to: 'rkreddy.aleti@gmail.com'
-        )
-    }
-    failure {
-        emailext(
-            attachmentsPattern: "${consoleOutputFile}, ${buildReportFile}",
-            body: '''The build failed.
-
-            Please find the attached build report and console output.''',
-            subject: 'Build Failure - ${JENKINS_JOB_NAME} #${BUILD_NUMBER}',
-            to: 'rkreddy.aleti@gmail.com'
-        )
-    }
-}
 }
