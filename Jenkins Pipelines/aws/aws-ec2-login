@@ -9,6 +9,7 @@ pipeline {
 
         CONSOLE_OUTPUT_FILE = 'console-output.txt'
         BUILD_REPORT_FILE = 'build-report.txt'
+        JOB_NAME = 'aws-ec2-login'
     }
 
     stages {
@@ -95,8 +96,11 @@ pipeline {
     post {
         always {
             script {
-                // Capture the console output
-                writeFile file: env.CONSOLE_OUTPUT_FILE, text: currentBuild.rawBuild.getLog().join('\n')
+                // Write the console output to a file
+                def logLines = currentBuild.rawBuild.getLog()
+                def consoleOutput = logLines.join('\n')
+                
+                writeFile file: env.CONSOLE_OUTPUT_FILE, text: consoleOutput
 
                 // Archive the artifacts
                 archiveArtifacts artifacts: "${env.CONSOLE_OUTPUT_FILE}, ${env.BUILD_REPORT_FILE}", allowEmptyArchive: true
@@ -108,7 +112,7 @@ pipeline {
                 body: '''The build was successful.
 
                 Please find the attached build report and console output.''',
-                subject: 'Build Success - ${JENKINS_JOB_NAME} #${BUILD_NUMBER}',
+                subject: 'Build Success - ${env.JOB_NAME} #${env.BUILD_NUMBER}',
                 to: 'rkreddy.aleti@gmail.com'
             )
         }
@@ -118,7 +122,7 @@ pipeline {
                 body: '''The build failed.
 
                 Please find the attached build report and console output.''',
-                subject: 'Build Failure - ${JENKINS_JOB_NAME} #${BUILD_NUMBER}',
+                subject: 'Build Failure - ${env.JOB_NAME} #${env.BUILD_NUMBER}',
                 to: 'rkreddy.aleti@gmail.com'
             )
         }
