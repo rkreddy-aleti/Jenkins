@@ -32,7 +32,7 @@ pipeline {
                                 sudo apt install default-jdk 
 
                                 echo "All commands executed successfully, on first server."
-                                echo "logging off from the first-server."
+                                echo "logged off from the first-server."
                         '''
                     }
                 }
@@ -72,7 +72,7 @@ pipeline {
                                 sudo apt install default-jdk 
 
                                 echo "All commands executed successfully, on second server."
-                                echo "logging off from the second-server."
+                                echo "logged off from the second-server."
 
                         '''
                     }
