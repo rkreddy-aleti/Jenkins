@@ -107,24 +107,32 @@ pipeline {
             }
         }
         success {
-            emailext(
-                attachmentsPattern: "${env.CONSOLE_OUTPUT_FILE}, ${env.BUILD_REPORT_FILE}",
-                body: '''The build was successful.
+            script {
+                def jobName = env.JOB_NAME
+                def buildNumber = env.BUILD_NUMBER
+                emailext(
+                    attachmentsPattern: "${env.CONSOLE_OUTPUT_FILE}, ${env.BUILD_REPORT_FILE}",
+                    body: '''The build was successful.
 
-                Please find the attached build report and console output.''',
-                subject: 'Build Success - ${env.JOB_NAME} #${env.BUILD_NUMBER}',
-                to: 'rkreddy.aleti@gmail.com'
-            )
+                    Please find the attached build report and console output.''',
+                    subject: "Build Success - ${jobName} #${buildNumber}",
+                    to: 'rkreddy.aleti@gmail.com'
+                )
+            }
         }
         failure {
-            emailext(
-                attachmentsPattern: "${env.CONSOLE_OUTPUT_FILE}, ${env.BUILD_REPORT_FILE}",
-                body: '''The build failed.
+            script {
+                def jobName = env.JOB_NAME
+                def buildNumber = env.BUILD_NUMBER
+                emailext(
+                    attachmentsPattern: "${env.CONSOLE_OUTPUT_FILE}, ${env.BUILD_REPORT_FILE}",
+                    body: '''The build failed.
 
-                Please find the attached build report and console output.''',
-                subject: 'Build Failure - ${env.JOB_NAME} #${env.BUILD_NUMBER}',
-                to: 'rkreddy.aleti@gmail.com'
-            )
+                    Please find the attached build report and console output.''',
+                    subject: "Build Failure - ${jobName} #${buildNumber}",
+                    to: 'rkreddy.aleti@gmail.com'
+                )
+            }
         }
     }
 }
