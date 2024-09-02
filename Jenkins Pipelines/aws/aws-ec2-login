@@ -89,6 +89,7 @@ pipeline {
                 script {
                     //Generate the report here
                     sh 'echo "Build report content" > build-report.txt'
+                    sh 'echo "Console report content" > consoleOutput'
                 }
             }
         }
@@ -96,7 +97,6 @@ pipeline {
     post {
         always {
             script {
-                sh 'echo "" > console-output.txt'
                 // Write the console output to a file
                 def logLines = currentBuild.rawBuild.getLog()
                 def consoleOutput = logLines.join('\n')
