@@ -6,6 +6,8 @@ pipeline {
         EC2_INSTANCE_IP1 = '54.87.134.2'
         EC2_INSTANCE_IP2 = '98.82.1.209'
         SSH_CREDENTIALS_ID = 'jenkins-aws'
+        CONSOLE_OUTPUT_FILE = "console_output.log"
+
     }
 
     stages {
@@ -81,7 +83,7 @@ pipeline {
                 writeFile file: env.CONSOLE_OUTPUT_FILE, text: consoleOutput
 
                 // Archive the artifacts
-                archiveArtifacts artifacts: "${env.CONSOLE_OUTPUT_FILE}, allowEmptyArchive: true"
+                archiveArtifacts artifacts: "${env.CONSOLE_OUTPUT_FILE}", allowEmptyArchive: true
             }
         }
         success {
