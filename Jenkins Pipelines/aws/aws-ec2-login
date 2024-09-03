@@ -8,7 +8,6 @@ pipeline {
         SSH_CREDENTIALS_ID = 'jenkins-aws'
 
         CONSOLE_OUTPUT_FILE = 'console-output.txt'
-        BUILD_REPORT_FILE = 'build-report.txt'
         JOB_NAME = 'aws-ec2-login'
     }
 
@@ -39,15 +38,6 @@ pipeline {
                                 echo "Thanks, logging off from the first-server."
                         '''
                     }
-                }
-            }
-        }
-
-        stage('generate report on first server') {
-            steps {
-                script {
-                    //Generate the report here
-                    sh 'echo "Build report content" > build-report.txt'
                 }
             }
         }
@@ -83,16 +73,6 @@ pipeline {
                 }
             }
         }
-
-        stage('generate report on second server') {
-            steps {
-                script {
-                    //Generate the report here
-                    sh 'echo "Build report content" > build-report.txt'
-                    sh 'echo "Console report content" > consoleOutput'
-                }
-            }
-        }
     }
     post {
         always {
@@ -104,7 +84,7 @@ pipeline {
                 writeFile file: env.CONSOLE_OUTPUT_FILE, text: consoleOutput
 
                 // Archive the artifacts
-                archiveArtifacts artifacts: "${env.CONSOLE_OUTPUT_FILE}, ${env.BUILD_REPORT_FILE}", allowEmptyArchive: true
+                archiveArtifacts artifacts: "${env.CONSOLE_OUTPUT_FILE}, allowEmptyArchive: true"
             }
         }
         success {
@@ -112,7 +92,7 @@ pipeline {
                 def jobName = env.JOB_NAME
                 def buildNumber = env.BUILD_NUMBER
                 emailext(
-                    attachmentsPattern: "${env.CONSOLE_OUTPUT_FILE}, ${env.BUILD_REPORT_FILE}",
+                    attachmentsPattern: "${env.CONSOLE_OUTPUT_FILE}",
                     body: '''The build was successful.
 
                     Please find the attached build report and console output.''',
@@ -126,7 +106,7 @@ pipeline {
                 def jobName = env.JOB_NAME
                 def buildNumber = env.BUILD_NUMBER
                 emailext(
-                    attachmentsPattern: "${env.CONSOLE_OUTPUT_FILE}, ${env.BUILD_REPORT_FILE}",
+                    attachmentsPattern: "${env.CONSOLE_OUTPUT_FILE}",
                     body: '''The build failed.
 
                     Please find the attached build report and console output.''',
