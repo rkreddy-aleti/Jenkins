@@ -8,7 +8,7 @@ pipeline {
         SSH_CREDENTIALS_ID = 'jenkins-aws'
 
         CONSOLE_OUTPUT_FILE = 'console-output.txt'
-        JOB_NAME = 'aws-ec2-login'
+        // JOB_NAME = 'aws-ec2-login'
     }
 
     stages {
