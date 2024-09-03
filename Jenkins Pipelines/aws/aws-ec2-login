@@ -79,6 +79,9 @@ pipeline {
                 // Write the console output to a file
                 def logLines = currentBuild.rawBuild.getLog()
                 def consoleOutput = logLines.join('\n')
+                def logLines = currentBuild.rawBuild.getLog(Integer.MAX_VALUE)
+                println "Captured Console Output:\n" + consoleOutput
+
                 
                 writeFile file: env.CONSOLE_OUTPUT_FILE, text: consoleOutput
 
