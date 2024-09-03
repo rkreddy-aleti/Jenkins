@@ -6,7 +6,6 @@ pipeline {
         EC2_INSTANCE_IP1 = '54.87.134.2'
         EC2_INSTANCE_IP2 = '98.82.1.209'
         SSH_CREDENTIALS_ID = 'jenkins-aws'
-        CONSOLE_OUTPUT_FILE = 'console-output'
     }
 
     stages {
