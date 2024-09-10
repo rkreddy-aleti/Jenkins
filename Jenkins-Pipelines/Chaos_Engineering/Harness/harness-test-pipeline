@@ -1,0 +1,42 @@
+pipeline {
+    agent any
+
+    environment {
+        HARNESS_API_KEY = credentials('Harness_API_Key')
+        CHAOS_EXPERIMENT_ID = '65d9a312-3ac1-400b-8ba3-f3c6387e9076'
+        HARNESS_ACCOUNT_ID = 'o3egXPU7Rvy-MpaR6X7xxw'
+        CHAOS_API_URL = 'https://app.harness.io/ng/account/o3egXPU7Rvy-MpaR6X7xxw/module/chaos/orgs/default/projects/default_project/experiments'
+    }
+
+    stages {
+        stage('Trigger Harness Chaos Experiment') {
+            steps {
+                script {
+                    def response = httpRequest(
+                        httpMode: 'GET',  // Change this as per the API documentation
+                        url: "${CHAOS_API_URL}/${CHAOS_EXPERIMENT_ID}/run",
+                        customHeaders: [
+                            [name: 'x-api-key', value: "${HARNESS_API_KEY}"],
+                            [name: 'Harness-Account-Id', value: "${HARNESS_ACCOUNT_ID}"]
+                        ],
+                        validResponseCodes: '200:299'
+                    )
+                    echo "Chaos Experiment Response: ${response.content}"
+                }
+            }
+        }
+
+        stage('Analyze Chaos Results') {
+            steps {
+                echo 'Analyzing Chaos Experiment Results...'
+                // Optional: Add logic to check experiment results or status here
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline completed.'
+        }
+    }
+}
