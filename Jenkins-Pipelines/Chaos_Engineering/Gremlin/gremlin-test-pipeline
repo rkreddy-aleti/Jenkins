@@ -1,2 +1,83 @@
-pipeline{
+pipeline {
+    agent any
+
+    environment {
+        GREMLIN_API_KEY = credentials('Gremlin-API-Key')                    // Jenkins credential ID
+        GREMLIN_TEAM_ID = '3649f5d0-d221-4958-89f5-d0d22119584a'            // Set your Gremlin Team ID here
+    }
+
+    stages {
+        stage('Trigger Gremlin Attack') {
+            steps {
+                script {
+                    def gremlinAttackId = triggerGremlinAttack()
+                    if (gremlinAttackId) {
+                        echo "Gremlin attack started with ID: ${gremlinAttackId}"
+                    } else {
+                        error "Failed to trigger Gremlin attack."
+                    }
+                }
+            }
+        }
+
+        stage('Analyze Results') {
+            steps {
+                script {
+                    def attackResult = getGremlinAttackResult(gremlinAttackId)
+                    echo "Attack result: ${attackResult}"
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Chaos Experiment Completed!'
+        }
+    }
+}
+
+def triggerGremlinAttack() {
+    def apiUrl = "https://api.gremlin.com/v1/attacks/new"
+    
+    def requestBody = """
+    {
+        "target": {
+            "type": "Exact",
+            "strategy": "Random",
+            "containers": [{
+                "labels": {"env": "production"}
+            }]
+        },
+        "command": {
+            "type": "CPU",
+            "args": ["--length", "300"]
+        }
+    }
+    """
+
+    def response = httpRequest(
+        url: apiUrl,
+        httpMode: 'POST',
+        customHeaders: [[name: 'Authorization', value: "Key ${env.GREMLIN_API_KEY}"]],
+        contentType: 'APPLICATION_JSON',
+        requestBody: requestBody
+    )
+
+    def jsonResponse = readJSON text: response.content
+    return jsonResponse.attackId
+}
+
+def getGremlinAttackResult(gremlinAttackId) {
+    def apiUrl = "https://api.gremlin.com/v1/attacks/${gremlinAttackId}"
+
+    def response = httpRequest(
+        url: apiUrl,
+        httpMode: 'GET',
+        customHeaders: [[name: 'Authorization', value: "Key ${env.GREMLIN_API_KEY}"]],
+        contentType: 'APPLICATION_JSON'
+    )
+
+    def jsonResponse = readJSON text: response.content
+    return jsonResponse
 }
