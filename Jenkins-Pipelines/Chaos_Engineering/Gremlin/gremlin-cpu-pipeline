@@ -7,12 +7,12 @@ pipeline {
         stage('Trigger Gremlin Attack') {
             steps {
                 script {
-                    def experimentId = '34c89155-6fe8-11ef-923a-be5645ba01ca'  // Replace with your experiment ID
+                    def experimentId = 'c0b70e34-8e30-48ae-b70e-348e30c8aeff'  // Replace with your experiment ID
                     
                     // Define the API request to trigger the experiment
                     def response = httpRequest(
                         httpMode: 'POST',
-                        url: "https://api.gremlin.com/v1/scenarios/c0b70e34-8e30-48ae-b70e-348e30c8aeff?teamId=3649f5d0-d221-4958-89f5-d0d22119584a",  // Gremlin API endpoint for triggering attacks
+                        url: "https://api.gremlin.com/v1/scenarios/",  // Gremlin API endpoint for triggering attacks
                         customHeaders: [[name: 'Authorization', value: "Key ${GREMLIN_API_KEY}", maskValue: true]],
                         contentType: 'APPLICATION_JSON',
                         acceptType: 'APPLICATION_JSON',
