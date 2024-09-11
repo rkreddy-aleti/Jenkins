@@ -38,7 +38,7 @@ pipeline {
 }
 
 def triggerGremlinAttack() {
-    def apiUrl = "https://api.gremlin.com/v1/attacks/new"
+    def apiUrl = "https://api.gremlin.com/attacks/new"
     
     def requestBody = """
     {
