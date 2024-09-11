@@ -12,7 +12,7 @@ pipeline {
                     // Define the API request to trigger the experiment
                     def response = httpRequest(
                         httpMode: 'POST',
-                        url: "https://app.gremlin.com/attacks/new",  // Gremlin API endpoint for triggering attacks
+                        url: "https://api.gremlin.com/v1/scenarios/c0b70e34-8e30-48ae-b70e-348e30c8aeff?teamId=3649f5d0-d221-4958-89f5-d0d22119584a",  // Gremlin API endpoint for triggering attacks
                         customHeaders: [[name: 'Authorization', value: "Key ${GREMLIN_API_KEY}", maskValue: true]],
                         contentType: 'APPLICATION_JSON',
                         acceptType: 'APPLICATION_JSON',
