@@ -61,13 +61,13 @@ def triggerGremlinAttack() {
 
 
 
-    def response = httpRequest(
-        url: apiUrl,
-        httpMode: 'POST',
-        customHeaders: [[name: 'Authorization', value: "Key ${env.GREMLIN_API_KEY}"]],
-        contentType: 'APPLICATION_JSON',
-        requestBody: requestBody
-    )
+    // def response = httpRequest(
+    //     url: apiUrl,
+    //     httpMode: 'POST',
+    //     customHeaders: [[name: 'Authorization', value: "Key ${env.GREMLIN_API_KEY}"]],
+    //     contentType: 'APPLICATION_JSON',
+    //     requestBody: requestBody
+    // )
 
     def jsonResponse = readJSON text: response.content
     return jsonResponse.attackId
