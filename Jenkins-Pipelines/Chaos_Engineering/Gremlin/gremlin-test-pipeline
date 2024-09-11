@@ -56,6 +56,11 @@ def triggerGremlinAttack() {
     }
     """
 
+    def response = httpRequest( ... ) // your current request
+    echo "Response: ${response.content}"
+
+
+
     def response = httpRequest(
         url: apiUrl,
         httpMode: 'POST',
