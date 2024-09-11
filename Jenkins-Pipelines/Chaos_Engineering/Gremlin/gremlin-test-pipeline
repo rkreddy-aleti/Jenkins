@@ -56,8 +56,25 @@ def triggerGremlinAttack() {
     }
     """
 
-    def response = httpRequest( 'https://app.gremlin.com/attacks/' ) // your current request
+    def response = httpRequest(
+    httpMode: 'GET',
+    url: 'https://app.gremlin.com/attacks/',
+    customHeaders: [[name: 'Authorization', value: "Bearer ${GREMLIN_API_KEY}", maskValue: true]],
+    acceptType: 'APPLICATION_JSON'
+    )
+
     echo "Response: ${response.content}"
+
+    // Only attempt to parse JSON if the content is valid
+    if (response.contentType == 'application/json') {
+        def jsonResponse = readJSON text: response.content
+    } else {
+        error("Received non-JSON response. Content: ${response.content}")
+    }
+
+
+    // def response = httpRequest( 'https://app.gremlin.com/attacks/' ) // your current request
+    // echo "Response: ${response.content}"
 
 
 
