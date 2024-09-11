@@ -1,0 +1,188 @@
+pipeline {
+    agent any
+
+    environment {
+        GREMLIN_API_KEY = 'd42b5978c2ab1b587dbf9e3c801b2eb29bc31ff78fbf28d46481ab52f8879af1'  // Gremlin API Key
+    }
+
+    stages {
+        stage('Trigger Gremlin Scenario') {
+            steps {
+                script {
+                    // Define the API URL
+                    def apiUrl = "https://api.gremlin.com/v1/scenarios/c0b70e34-8e30-48ae-b70e-348e30c8aeff?teamId=3649f5d0-d221-4958-89f5-d0d22119584a"
+                    
+                    // Define the JSON request body (can be multiline if needed)
+                    def requestBody = '''{
+                        "name": "CPU Chaos on AWS's EC2",
+                        "description": "Check the EC2 instance's CPU resource",
+                        "recommended_scenario_id": "",
+                        "graph": {
+                            "nodes": {
+                            "0": {
+                                "target_definition": {
+                                "containerSelection": {
+                                    "selectionType": "ANY"
+                                },
+                                "strategy_type": "Random",
+                                "target_type": "Host",
+                                "strategy": {
+                                    "percentage": 100,
+                                    "attrs": {
+                                    "multiSelectTags": {
+                                        "local-ip": [
+                                        "172.31.82.87"
+                                        ],
+                                        "public-ip": [
+                                        "54.163.192.238"
+                                        ]
+                                    }
+                                    },
+                                    "multi_select_tags": {
+                                    "local-ip": [
+                                        "172.31.82.87"
+                                    ],
+                                    "public-ip": [
+                                        "54.163.192.238"
+                                    ]
+                                    },
+                                    "type": "RandomPercent"
+                                }
+                                },
+                                "impact_definition": {
+                                "infra_command_type": "cpu",
+                                "infra_command_args": {
+                                    "cores": 2,
+                                    "percent": 50,
+                                    "all_cores": false,
+                                    "type": "cpu",
+                                    "length": 60,
+                                    "cli_args": [
+                                    "cpu",
+                                    "-c",
+                                    "2",
+                                    "-p",
+                                    "50",
+                                    "--length",
+                                    "60"
+                                    ]
+                                }
+                                },
+                                "attack_configuration": {
+                                "command": {
+                                    "infraCommandType": "cpu",
+                                    "infraCommandArgs": {
+                                    "cores": 2,
+                                    "percent": 50,
+                                    "all_cores": false,
+                                    "type": "cpu",
+                                    "length": 60,
+                                    "cli_args": [
+                                        "cpu",
+                                        "-c",
+                                        "2",
+                                        "-p",
+                                        "50",
+                                        "--length",
+                                        "60"
+                                    ]
+                                    }
+                                },
+                                "targets": [
+                                    {
+                                    "targetingStrategy": {
+                                        "type": "Host",
+                                        "multiSelectTags": {
+                                        "local-ip": [
+                                            "172.31.82.87"
+                                        ],
+                                        "public-ip": [
+                                            "54.163.192.238"
+                                        ]
+                                        }
+                                    }
+                                    }
+                                ],
+                                "sampling": {
+                                    "type": "Even",
+                                    "percent": 100
+                                }
+                                },
+                                "include_new_targets": true,
+                                "type": "InfraAttack",
+                                "id": 0,
+                                "state": {
+                                "lifecycle": "NotStarted"
+                                },
+                                "guid": "599c51e6-64be-4b3f-81b5-e208a2738f02"
+                            }
+                            },
+                            "start_id": "0",
+                            "observers": [
+                            {
+                                "name": "cpu-check",
+                                "thirdPartyPresets": "aws",
+                                "endpointConfiguration": {
+                                "url": "https://monitoring.us-east-1.amazonaws.com/?Action=DescribeAlarms&AlarmNamePrefix=cpr-usage&Version=2010-08-01",
+                                "method": "GET",
+                                "headers": {}
+                                },
+                                "rawEndpointConfiguration": {
+                                "url": "https://us-east-1.console.aws.amazon.com/cloudwatch/home?region=us-east-1#alarmsV2:alarm/cpr-usage?~(selectedIds~(~'cpr-usage))",
+                                "headers": {}
+                                },
+                                "evaluationConfiguration": {
+                                "okLatencyMaxMs": 5000,
+                                "okStatusCodes": [
+                                    "200"
+                                ],
+                                "responseBodyEvaluation": {
+                                    "op": "AND",
+                                    "predicates": [
+                                    {
+                                        "comparator": "EQU",
+                                        "type": "String",
+                                        "jpQuery": ".DescribeAlarmsResponse.DescribeAlarmsResult.MetricAlarms[0].StateValue",
+                                        "rValue": "OK"
+                                    }
+                                    ]
+                                }
+                                },
+                                "externalIntegrationId": "TYPE~AWS_995e51f9b0028c1d6da3d2a12109c50934f2d42f73a502429e0d8a63db66209e21b7001fb4c00193fe93ef454841e02b03c6c4e61c35fd23e45b2c04c3e27bd8~TEAM~3649f5d0-d221-4958-89f5-d0d22119584a~NAME~AWS",
+                                "isPrivateNetwork": false,
+                                "isAutoGenerated": false,
+                                "type": "ContinuousStatusCheck",
+                                "id": "0",
+                                "state": {
+                                "private_network_invocation_completed": false,
+                                "lifecycle": "NotStarted"
+                                },
+                                "guid": "3ce60b85-6f24-4cc7-a60b-856f241cc763"
+                            }
+                            ]
+                            }
+                        }'''
+
+                    // Send the PUT request to the Gremlin API
+                    def response = httpRequest(
+                        httpMode: 'PUT',
+                        url: apiUrl,
+                        contentType: 'APPLICATION_JSON',
+                        customHeaders: [
+                            [name: 'Authorization', value: "Key ${GREMLIN_API_KEY}", maskValue: true],
+                            [name: 'Content-Type', value: 'application/json']
+                        ],
+                        requestBody: requestBody
+                    )
+
+                    // Handling the response
+                    if (response.status == 200 || response.status == 201) {
+                        echo "Scenario triggered successfully. Response: ${response.content}"
+                    } else {
+                        error("Failed to trigger scenario. Status: ${response.status}, Response: ${response.content}")
+                    }
+                }
+            }
+        }
+    }
+}
