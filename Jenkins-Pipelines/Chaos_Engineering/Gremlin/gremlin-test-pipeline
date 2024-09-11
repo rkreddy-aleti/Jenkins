@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        GREMLIN_API_KEY = credentials('Gremlin-API-Key')                    // Jenkins credential ID
+        GREMLIN_API_KEY = credentials('Gremlin_API_Key')                    // Jenkins credential ID
         GREMLIN_TEAM_ID = '3649f5d0-d221-4958-89f5-d0d22119584a'            // Set your Gremlin Team ID here
     }
 
