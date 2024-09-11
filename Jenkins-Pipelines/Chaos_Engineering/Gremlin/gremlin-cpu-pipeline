@@ -1,0 +1,53 @@
+pipeline {
+    agent any
+    environment {
+        GREMLIN_API_KEY = credentials('Gremlin_API_Key')  // Fetch API key securely from Jenkins credentials
+    }
+    stages {
+        stage('Trigger Gremlin Attack') {
+            steps {
+                script {
+                    def experimentId = '34c89155-6fe8-11ef-923a-be5645ba01ca'  // Replace with your experiment ID
+                    
+                    // Define the API request to trigger the experiment
+                    def response = httpRequest(
+                        httpMode: 'POST',
+                        url: "https://app.gremlin.com/attacks/new",  // Gremlin API endpoint for triggering attacks
+                        customHeaders: [[name: 'Authorization', value: "Key ${GREMLIN_API_KEY}", maskValue: true]],
+                        contentType: 'APPLICATION_JSON',
+                        acceptType: 'APPLICATION_JSON',
+                        requestBody: """
+                        {
+                            "command": "run",
+                            "target": {
+                                "id": "${experimentId}"
+                            }
+                        }
+                        """
+                    )
+
+                    echo "Response: ${response.content}"
+
+                    // Check if the response is successful
+                    if (response.status == 200 || response.status == 201) {
+                        echo "Experiment started successfully."
+                    } else {
+                        error("Failed to start the experiment. Response: ${response.content}")
+                    }
+                }
+            }
+        }
+
+        stage('Monitor Experiment Results') {
+            steps {
+                echo "Monitoring experiment results..."
+                // Add steps to monitor the Gremlin experiment if needed
+            }
+        }
+    }
+    post {
+        always {
+            echo "Chaos Experiment Completed!"
+        }
+    }
+}
