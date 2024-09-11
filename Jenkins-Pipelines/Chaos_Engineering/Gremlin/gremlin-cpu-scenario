@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        GREMLIN_API_KEY = 'd42b5978c2ab1b587dbf9e3c801b2eb29bc31ff78fbf28d46481ab52f8879af1'  // Gremlin API Key
+        GREMLIN_API_KEY = credentials('Gremlin_API_Key')  // Fetch API key securely from Jenkins credentials
     }
 
     stages {
