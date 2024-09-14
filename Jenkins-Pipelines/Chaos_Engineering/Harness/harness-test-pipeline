@@ -28,7 +28,7 @@ pipeline {
 
         stage('Analyze Chaos Results') {
             steps {
-                echo 'Analyzing the Chaos Experiment Results...'
+                echo 'Analyzing Chaos Experiment Results...'
                 // Optional: Add logic to check experiment results or status here
             }
         }
